@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from seleniumwire import webdriver
 import time
 import csv
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,7 +14,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def captcha_wallet(driver):
     field = driver.find_element(By.XPATH, '''//*[@id="__next"]/main/form/input''')
-    field.send_keys("0xFBAE4529A4fd3eF779d07581fb1e00aEE3FD3E97")
+    field.send_keys("0xfD8544C21b967535006AF3048bd15362f2cD2cdF")
     print("passed the wallet address")
     driver.find_element(By.XPATH, '''//*[@id="__next"]/main/form/button''').click()
     print("clicked on the req")
@@ -29,7 +30,7 @@ def captcha_wallet(driver):
     print("switched to the iframe for the extension click ")
     WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#rc-imageselect > div.rc-footer > div.rc-controls > div.primary-controls > div.rc-buttons > div.button-holder.help-button-holder"))).click()
     print("clicked on the extension button")
-    time.sleep(30)
+    time.sleep(300)
 
     
 
@@ -54,9 +55,14 @@ def main():
     #driver.get("https://faucet.triangleplatform.com/arbitrum/sepolia")
 
     extension_path = "C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\mpbjkejclgfgadiemmefgebjfooflfhl\\3.1.0_0"
-    options = webdriver.ChromeOptions()
-    options.add_argument(f'--load-extension={extension_path}')
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    options={
+       'proxy':{
+            'http': 'http://aecba55b52c2b576:RNW78Fm5@res.proxy-seller.com:10000'
+       }
+     }  
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument(f'--load-extension={extension_path}')
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options, seleniumwire_options=options)
     driver.get("https://faucet.triangleplatform.com/arbitrum/sepolia")
     driver.maximize_window()
 
